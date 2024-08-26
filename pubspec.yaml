@@ -1,0 +1,12 @@
+name: ad_hoc_ident
+description: "Provides a framework to extract identifiers from NFC tags and MRZ documents."
+version: 0.0.1-preview-1
+homepage: https://github.com/FabianMoeckel/ad_hoc_ident
+repository: https://github.com/FabianMoeckel/ad_hoc_ident/tree/main/ad_hoc_ident
+
+environment:
+  sdk: '>=3.4.1 <4.0.0'
+
+dev_dependencies:
+  lints: ^4.0.0
+  test: ^1.25.8
