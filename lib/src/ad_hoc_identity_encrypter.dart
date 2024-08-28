@@ -29,10 +29,33 @@ extension FunctionalityWrappers on AdHocIdentityEncrypter {
   /// For this protection to be effective, the pepper needs to be kept secret.
   AdHocIdentityEncrypter withPepper(String pepper) {
     return AdHocIdentityEncrypter.fromDelegate(
-      (identity) async => this.encrypt(
+      (identity) async => encrypt(
         AdHocIdentity(
             type: identity.type, identifier: identity.identifier + pepper),
       ),
+    );
+  }
+
+  /// Appends the result of the [createOrGetSalt] invocation to the
+  /// [AdHocIdentity.identifier] before encrypting.
+  ///
+  /// This can improve security, by changing the calculated encrypted value
+  /// from the one without the salt. This is e.g. relevant when using hashing
+  /// for encryption and improves security against rainbow table attacks.
+  /// For this protection to be effective, a different random salt should
+  /// be created for each identity. The salt can be made public.
+  AdHocIdentityEncrypter withSalt(
+      FutureOr<String> Function(AdHocIdentity identity) createOrGetSalt) {
+    return AdHocIdentityEncrypter.fromDelegate(
+      (identity) async {
+        final salt = await createOrGetSalt(identity);
+        return encrypt(
+          AdHocIdentity(
+            type: identity.type,
+            identifier: identity.identifier + salt,
+          ),
+        );
+      },
     );
   }
 
@@ -43,7 +66,7 @@ extension FunctionalityWrappers on AdHocIdentityEncrypter {
   /// used for authentication.
   AdHocIdentityEncrypter secureType() {
     return AdHocIdentityEncrypter.fromDelegate(
-      (identity) async => this.encrypt(
+      (identity) async => encrypt(
         AdHocIdentity(
             type: "secure", identifier: identity.identifier + identity.type),
       ),

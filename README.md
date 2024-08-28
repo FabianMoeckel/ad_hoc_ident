@@ -7,20 +7,20 @@ Provides a framework to extract identifiers from NFC tags and MRZ documents.
 
 ## Features
 The package consists of three domain packages. Each is provided with some implementation packages.
-* **Main domain:** *ad\_hoc\_identity*
-    * **Hashing algorithms:** *ad\_hoc\_identity\_crypto*
-    * **Human readable pseudonym generation:** *ad\_hoc\_identity\_readable\_pseudonym*
-    * **Background isolates:** *ad\_hoc\_identity\_flutter*
-* **NFC Domain:** *ad\_hoc\_identity\_nfc*
-    * **Stream based input:** *ad\_hoc\_identity\_nfc\_nfc\_manager*
-    * **Polling based input:** *ad\_hoc\_identity\_nfc\_flutter\_nfc\_kit*
-    * **EMV card number detection:** *ad\_hoc\_identity\_nfc\_detect\_emv*
-* **OCR Domain:** *ad\_hoc\_identity\_ocr*
-    * **Basic *camera* input:** *ad\_hoc\_identity\_ocr\_camera*
-    * **Input based on the *camerawesome* package:** *ad\_hoc\_identity\_ocr\_camerawesome*
-    * **Text extraction based on *google_ml_kit*:** *ad\_hoc\_identity\_ocr\_extract\_google*
-    * **Text extraction based on *flutter_vision*:** *ad\_hoc\_identity\_ocr\_extract\_tesseract*
-    * **MRZ document type and number detection:** *ad\_hoc\_identity\_ocr\_parse\_mrz*
+* **Main domain:** [ad\_hoc\_ident](https://pub.dev/packages/ad_hoc_ident)
+    * **Hashing algorithms:** [ad\_hoc\_ident\_util\_crypto](https://pub.dev/packages/ad_hoc_ident_util_crypto)
+    * **Human readable pseudonym generation:** [ad\_hoc\_ident\_util\_readable\_pseudonym](https://pub.dev/packages/ad_hoc_ident_util_readable_pseudonym)
+    * **Background isolates:** [ad\_hoc\_ident\_util\_flutter](https://pub.dev/packages/ad_hoc_ident_util_flutter)
+* **NFC Domain:** [ad\_hoc\_ident\_nfc](https://pub.dev/packages/ad_hoc_ident_nfc)
+    * **Stream based input:** [ad\_hoc\_ident\_nfc\_nfc\_manager](https://pub.dev/packages/ad_hoc_ident_nfc_nfc_manager)
+    * **Polling based input:** [ad\_hoc\_ident\_nfc\_flutter\_nfc\_kit](https://pub.dev/packages/ad_hoc_ident_nfc_flutter_nfc_kit)
+    * **EMV card number detection:** [ad\_hoc\_ident\_nfc\_detect\_emv](https://pub.dev/packages/ad_hoc_ident_nfc_detect_emv)
+* **OCR Domain:** [ad\_hoc\_ident\_ocr](https://pub.dev/packages/ad_hoc_ident_ocr)
+    * **Basic [camera](https://pub.dev/packages/camera) input:** [ad\_hoc\_ident\_ocr\_camera](https://pub.dev/packages/ad_hoc_ident_ocr_camera)
+    * **Camera input based on the [camerawesome](https://pub.dev/packages/camerawesome) package:** [ad\_hoc\_ident\_ocr\_camerawesome](https://pub.dev/packages/ad_hoc_ident_ocr_camerawesome)
+    * **Text extraction based on [google\_ml\_kit](https://pub.dev/packages/google_mlkit_text_recognition):** [ad\_hoc\_ident\_ocr\_extract\_google](https://pub.dev/packages/ad_hoc_ident_ocr_extract_google)
+    * **Text extraction based on [flutter\_vision](https://pub.dev/packages/flutter_vision) (Tesseract):** [ad\_hoc\_ident\_ocr\_extract\_tesseract](https://pub.dev/packages/ad_hoc_ident_ocr_extract_tesseract)
+    * **MRZ document type and number detection based on [mrz\_parser](https://pub.dev/packages/mrz_parser):** [ad\_hoc\_ident\_ocr\_parse\_mrz](https://pub.dev/packages/ad_hoc_ident_ocr_parse_mrz)
 
 ## Getting started
 

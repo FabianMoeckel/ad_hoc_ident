@@ -3,17 +3,16 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:ad_hoc_ident/ad_hoc_ident.dart';
-import 'package:ad_hoc_ident_crypto/ad_hoc_ident_crypto.dart';
-import 'package:ad_hoc_ident_flutter/ad_hoc_ident_flutter.dart';
 import 'package:ad_hoc_ident_nfc/ad_hoc_ident_nfc.dart';
 import 'package:ad_hoc_ident_nfc_detect_emv/ad_hoc_ident_nfc_detect_emv.dart';
 import 'package:ad_hoc_ident_nfc_scanner_nfc_manager/ad_hoc_ident_nfc_scanner_nfc_manager.dart';
 import 'package:ad_hoc_ident_ocr/ad_hoc_ident_ocr.dart';
 import 'package:ad_hoc_ident_ocr_camerawesome/ad_hoc_ident_ocr_camerawesome.dart';
 import 'package:ad_hoc_ident_ocr_extract_google/ad_hoc_ident_ocr_extract_google.dart';
-// import 'package:ad_hoc_ident_ocr_extract_tesseract/ad_hoc_ident_ocr_extract_tesseract.dart';
 import 'package:ad_hoc_ident_ocr_parse_mrz/ad_hoc_ident_ocr_parse_mrz.dart';
-import 'package:ad_hoc_ident_readable_pseudonym/ad_hoc_ident_readable_pseudonym.dart';
+import 'package:ad_hoc_ident_util_crypto/ad_hoc_ident_util_crypto.dart';
+import 'package:ad_hoc_ident_util_flutter/ad_hoc_ident_util_flutter.dart';
+import 'package:ad_hoc_ident_util_readable_pseudonym/ad_hoc_ident_util_readable_pseudonym.dart';
 import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
@@ -34,10 +33,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final MemoryPseudonymStorage _storage = PseudonymStorage.memory();
 
-  late final NfcManagerNfcScanner _nfcScanner;
+  late final NfcScanner _nfcScanner;
   late final AdHocIdentityScanner<OcrImage> _ocrScanner;
-
-  late final GoogleOcrTextExtractor _googleExtractor;
+  late final OcrTextExtractor _extractor;
   late final StreamController<OcrImage> _cameraStreamController;
 
   Stream<AdHocIdentity?>? _identityStream;
@@ -53,24 +51,25 @@ class _MyAppState extends State<MyApp> {
     final encrypter = WordPseudonymEncrypter(
             innerEncrypter: CryptoAdHocIdentityEncrypter.sha512,
             storage: _storage)
+        // in production code you might want to add a salt and obfuscate
+        // the type
+        // .secureType()
+        // .withSalt((identity) => 'someSecurelyCreatedOrFetchedSalt')
         .withPepper(securePepper);
 
-    _nfcScanner = NfcManagerNfcScanner(
-        detector: AdHocIdentityDetector.fromList([
-          // keep the uid detector first,
-          // as it restarts the nfc adapter,
-          // causing all adapters before it to be evaluated again.
-          NfcDetectorUid(restartTimeout: const Duration(seconds: 1)),
-          NfcDetectorEmv(),
-        ]),
-        preferredTagTypes: [
-          PlatformTagType.isoDep, // prefer isoDep for emv capabilities
-        ],
-        encrypter: encrypter);
+    final nfcDetector = AdHocIdentityDetector.fromList([
+      // keep the uid detector first,
+      // as it restarts the nfc adapter,
+      // causing all adapters before it to be evaluated again.
+      NfcDetectorUid(restartTimeout: const Duration(seconds: 1)),
+      NfcDetectorEmv(),
+    ]);
+    _nfcScanner = _initNfcManagerScanner(nfcDetector, encrypter);
+    // _nfcScanner = _initNfcKitScanner(nfcDetector, encrypter);
 
     // With this implementation, the app needs to be restarted,
     // if nfc is unavailable during startup.
-    // In a productive environment you might want to poll the nfc state
+    // In a productive environment you might want to re-poll the nfc state
     // until it becomes available
     _nfcScanner.isAvailable().then((available) {
       if (available) {
@@ -78,40 +77,67 @@ class _MyAppState extends State<MyApp> {
       }
     });
 
-    _googleExtractor = GoogleOcrTextExtractor();
     _cameraStreamController = StreamController.broadcast();
-    _ocrScanner = AdHocIdentityScanner(
-      inputStream: _cameraStreamController.stream,
-      // use a background detector to offload ocr to another isolate
-      detector: BackgroundIdentityDetector(
-        OcrIdentityDetector(
-          extractor: _googleExtractor,
-          parser: MrzTextIdentityParser(),
-        ),
-      ),
-      debounce: true,
-      encrypter: encrypter,
+
+    // Wrapping the google extractor in a future is simply to allow easier
+    // switching between the engines.
+    Future.value(GoogleOcrTextExtractor()).then(
+      // TesseractOcrTextExtractor.fromFile().then(
+      (extractor) {
+        _extractor = extractor;
+        _ocrScanner = AdHocIdentityScanner(
+          inputStream: _cameraStreamController.stream,
+          // use a background detector to offload ocr to another isolate
+          detector: BackgroundIdentityDetector(
+            OcrIdentityDetector(
+              extractor: extractor,
+              parser: MrzTextIdentityParser(),
+            ),
+          ),
+          debounce: true,
+          encrypter: encrypter,
+        );
+
+        final stream = StreamGroup.merge([
+          _nfcScanner.stream,
+          _ocrScanner.stream.whereNotNull(),
+        ]).distinct().shareValue().asBroadcastStream();
+
+        if (mounted) {
+          setState(() {
+            _identityStream = stream;
+          });
+        }
+      },
     );
-
-    final stream = StreamGroup.merge([
-      _nfcScanner.stream.handleError(
-        (Object error, StackTrace? _) async {
-          Future.microtask(
-              () => _nfcScanner.restart(const Duration(seconds: 3)));
-        },
-        test: (error) => error is FirstScanException,
-      ),
-      _ocrScanner.stream.whereNotNull(),
-    ]).distinct().shareValue().asBroadcastStream();
-
-    if (mounted) {
-      setState(() {
-        _identityStream = stream;
-      });
-    }
 
     super.initState();
   }
+
+  NfcScanner _initNfcManagerScanner(AdHocIdentityDetector<NfcTag> detector,
+      AdHocIdentityEncrypter encrypter) {
+    final unhandledScanner = NfcManagerNfcScanner(
+        detector: detector,
+        preferredTagTypes: [
+          PlatformTagType.isoDep, // prefer isoDep for emv capabilities
+        ],
+        encrypter: encrypter);
+    return unhandledScanner.handle<FirstScanException>(
+        FirstScanException.createDefaultHandler(unhandledScanner));
+  }
+
+  // NfcScanner _initNfcKitScanner(AdHocIdentityDetector<NfcTag> detector,
+  //     AdHocIdentityEncrypter encrypter) {
+  //   final unhandledScanner = NfcKitNfcScanner.repeatPolling(
+  //       detector: detector,
+  //       idleDuration: const Duration(milliseconds: 100),
+  //       encrypter: encrypter);
+  //   return unhandledScanner.handle<FirstScanException>(
+  //     (error, stackTrace) {
+  //       //ignore
+  //     },
+  //   );
+  // }
 
   String _initPepper() {
     // in a productive environment,
@@ -129,7 +155,7 @@ class _MyAppState extends State<MyApp> {
   void dispose() {
     _cameraStreamController.close();
     _nfcScanner.stop();
-    _googleExtractor.close();
+    _extractor.close();
     super.dispose();
   }
 
@@ -187,7 +213,10 @@ class _MyAppState extends State<MyApp> {
                     child: _showCamera
                         ? CamerawesomeAdapter(
                             onImage: _cameraStreamController.add)
-                        // CameraView(onImage: _cameraStreamController.add)
+                        // ? CameraView(
+                        //     onImage: _cameraStreamController.add,
+                        //     imageFormatGroupName: 'jpeg', // 'nv21',
+                        //   )
                         : TextButton.icon(
                             onPressed: _toggleCamera,
                             label: const Text('Enable camera'),

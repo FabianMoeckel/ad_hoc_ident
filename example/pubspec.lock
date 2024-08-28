@@ -4,80 +4,91 @@ packages:
   ad_hoc_ident:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      name: ad_hoc_ident
+      sha256: "40e44d27bb7b59d3d6cf4f927fc8e2be3f37c6a0516d2b8599feea68def97207"
+      url: "https://pub.dev"
+    source: hosted
     version: "0.0.1-preview-1"
-  ad_hoc_ident_crypto:
-    dependency: "direct main"
-    description:
-      path: "../../ad_hoc_ident_crypto"
-      relative: true
-    source: path
-    version: "0.0.1"
-  ad_hoc_ident_flutter:
-    dependency: "direct main"
-    description:
-      path: "../../ad_hoc_ident_flutter"
-      relative: true
-    source: path
-    version: "0.0.1"
   ad_hoc_ident_nfc:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_nfc"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_nfc
+      sha256: eec30dc086e6e209a969ed91167aa4769e779a0062d5de34943c8d1722027abe
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_nfc_detect_emv:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_nfc_detect_emv"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_nfc_detect_emv
+      sha256: "11ff082631cbf9cf3f610a7ddbcc916421242b8036532313e451de87fae147cf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_nfc_scanner_nfc_manager:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_nfc_scanner_nfc_manager"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_nfc_scanner_nfc_manager
+      sha256: b9b11fc1f52f0cf6d9a91afa637dabaa6010a1c1a2a4b0ec4a07e2bd1fd208cc
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_ocr:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_ocr"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_ocr
+      sha256: "236680b268609663b896f974d7418f9165f6cef76231cd680587f3d97c963957"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_ocr_camerawesome:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_ocr_camerawesome"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_ocr_camerawesome
+      sha256: "68508f2f8a83e648363b05fb8e494e7544995c92f6e18fe23ea8285c7e3ccd7e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_ocr_extract_google:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_ocr_extract_google"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_ocr_extract_google
+      sha256: "41f5685a10d0b235215e2d24c94ef703f17284a538eaa046595c4c81c7595bf3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   ad_hoc_ident_ocr_parse_mrz:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_ocr_parse_mrz"
-      relative: true
-    source: path
-    version: "0.0.1"
-  ad_hoc_ident_readable_pseudonym:
+      name: ad_hoc_ident_ocr_parse_mrz
+      sha256: "6c653cc82490c9e8a18125e14c82ba0eb27b21b9288352eeee15a908a93f6690"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
+  ad_hoc_ident_util_crypto:
     dependency: "direct main"
     description:
-      path: "../../ad_hoc_ident_readable_pseudonym"
-      relative: true
-    source: path
-    version: "0.0.1"
+      name: ad_hoc_ident_util_crypto
+      sha256: "05644cd2068aaeac4930d77dc7e8d97944903e499465b6363b9806430f326863"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-2"
+  ad_hoc_ident_util_flutter:
+    dependency: "direct main"
+    description:
+      name: ad_hoc_ident_util_flutter
+      sha256: c3f95c8b1a4719c9f78aed81318b3f8d0a30353aa3c12dff420cbc17f147912b
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
+  ad_hoc_ident_util_readable_pseudonym:
+    dependency: "direct main"
+    description:
+      name: ad_hoc_ident_util_readable_pseudonym
+      sha256: "0a28d7313d46a2a7cabe05ebcf6689ea0cebcbab3616db03ead375c3fb5462d0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1-preview-1"
   archive:
     dependency: transitive
     description:
@@ -102,46 +113,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
-  camera:
-    dependency: "direct main"
-    description:
-      name: camera
-      sha256: "26ff41045772153f222ffffecba711a206f670f5834d40ebf5eed3811692f167"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.11.0+2"
-  camera_android_camerax:
-    dependency: transitive
-    description:
-      name: camera_android_camerax
-      sha256: "8bd9cab67551642eb33ceb33ece7acc0890014fc90ddfae637c7e2b683657e65"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.6.7+2"
-  camera_avfoundation:
-    dependency: transitive
-    description:
-      name: camera_avfoundation
-      sha256: "7c28969a975a7eb2349bc2cb2dfe3ad218a33dba9968ecfb181ce08c87486655"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.17+3"
-  camera_platform_interface:
-    dependency: transitive
-    description:
-      name: camera_platform_interface
-      sha256: b3ede1f171532e0d83111fe0980b46d17f1aa9788a07a2fbed07366bbdbb9061
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.8.0"
-  camera_web:
-    dependency: transitive
-    description:
-      name: camera_web
-      sha256: "595f28c89d1fb62d77c73c633193755b781c6d2e0ebcd8dc25b763b514e6ba8f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.5"
   camerawesome:
     dependency: transitive
     description:
@@ -243,21 +214,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      sha256: c6b0b4c05c458e1c01ad9bcc14041dd7b1f6783d487be4386f793f47a8a4d03e
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.20"
   flutter_test:
     dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -482,14 +440,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
-  stream_transform:
-    dependency: transitive
-    description:
-      name: stream_transform
-      sha256: "14a00e794c7c11aa145a170587321aedce29769c08d7f58b1d141da75e3b1c6f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
   string_scanner:
     dependency: transitive
     description:
